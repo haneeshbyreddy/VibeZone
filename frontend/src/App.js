@@ -3,7 +3,7 @@ import './App.css';
 import React from 'react';
 
 function App() {
-  const [] = React.useState(0);
+  const [count,setcount] = React.useState(0);
   return (
     <div >
       <h1>Lets Build VibeZone </h1>
