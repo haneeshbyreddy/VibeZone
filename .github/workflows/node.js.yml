@@ -23,10 +23,11 @@ jobs:
         with:
           node-version: '21'
 
-      - name: Install dependencies
-        working-directory: frontend  # navigate to the frontend directory
-        run: npm install
+      - name: Install dependencies and build
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          rm -rf /home/haneesh-server/docker/nginx/sites/build
+          mv ../build /home/haneesh-server/docker/nginx/sites/
 
-      - name: Build
-        working-directory: frontend  # navigate to the frontend directory
-        run: npm run build
