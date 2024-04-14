@@ -6,7 +6,6 @@ function App() {
   
   return (
     <div className='nav'>
-      
         <h1 className='main-heading'>VibeZone</h1>
         <div className='top-components'>
         <div class="navbar">
