@@ -2,7 +2,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [user, setUser] = useState({ "name":"Demo" })
+  const [user, setUser] = useState({ "name":"Demo", "profileImage":"None", "posts": [] })
   const [refreshPosts, setRefreshPosts] = useState(false)
 
   useEffect( () => {
