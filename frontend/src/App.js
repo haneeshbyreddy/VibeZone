@@ -8,6 +8,18 @@ function App() {
       profileImage: "https://i.pinimg.com/236x/42/e3/41/42e3416affef618bd1cd83f0564acf53.jpg",
       profileName: "Batman",
       imageUrl: "https://i.pinimg.com/236x/fb/94/6f/fb946fe1ea1b40a3bfed299dfb2bd6e4.jpg",
+    },
+    {
+      id: 2,
+      profileImage: "https://i.pinimg.com/236x/42/e3/41/42e3416affef618bd1cd83f0564acf53.jpg",
+      profileName: "Batman",
+      imageUrl: "https://i.pinimg.com/236x/fb/94/6f/fb946fe1ea1b40a3bfed299dfb2bd6e4.jpg",
+    },
+    {
+      id: 3,
+      profileImage: "https://i.pinimg.com/236x/42/e3/41/42e3416affef618bd1cd83f0564acf53.jpg",
+      profileName: "Batman",
+      imageUrl: "https://i.pinimg.com/236x/fb/94/6f/fb946fe1ea1b40a3bfed299dfb2bd6e4.jpg",
     }
   ])
 
@@ -29,9 +41,7 @@ function App() {
               <img className='profile-image image' src={post.profileImage} alt='Img' />
               <div className='profile-name'>{post.profileName}</div>
             </div>
-            <div className='post-image image'>
-              <img src={post.imageUrl} alt='Post' />
-            </div>
+              <img className='post-image image' src={post.imageUrl} alt='Post' />
           </div>
         ))}
       </div>
