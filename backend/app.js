@@ -1,16 +1,28 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const mongoose = require('mongoose')
 const Users = require('./models/users.model.js')
 const uri = "mongodb+srv://Demo:Demo@vibezone.kohhjtv.mongodb.net/";
 
-let port = '3000'
+let port = '3001'
 
 app.use(express.json())
+app.use(cors())
 
-app.get('/', (req,res) => {
-  res.send('Hello')
-});
+
+app.get('/api/getAllUsers', async (req, res) => {
+  let allUsers = await Users.find({})
+  res.send(allUsers)
+})
+
+app.get('/api/:id', async (req, res) => {
+  let user = await Users.findById(req.params.id)
+  if (!user) {
+    return res.status(404).json({ error: "User not found"})
+  }
+  res.status(200).json(user)
+})
 
 app.post('/api/addUser', async (req, res) => {
   let user = await Users.create(req.body)
