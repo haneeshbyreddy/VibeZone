@@ -39,6 +39,13 @@ app.post('/api/:id/addPost', async (req, res) => {
   res.status(200).json(user)
 })
 
+app.post('/api/:id/deletePost/:postid', async (res, req) => {
+  Users.updateOne(
+    {_id: req.params.id},
+    {$pull: {posts: req.params.postid}}
+  )
+})
+
 async function startServer(uri) {
   await mongoose.connect(uri).then(() => {
     console.log('connected to databse')

@@ -34,6 +34,7 @@ function App() {
       body: JSON.stringify({ "imgURL": inputValue })
     });
     if (response.ok) {
+      setRefreshPostToggle(!refreshPostToggle)
       alert('Post added successfully!');
     } else {
       alert('Failed to add Post');
