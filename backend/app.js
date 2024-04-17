@@ -39,10 +39,11 @@ app.post('/api/:id/addPost', async (req, res) => {
   res.status(200).json(user)
 })
 
-app.post('/api/:id/deletePost/:postid', async (res, req) => {
+app.post('/api/:id/deletePost/', async (res, req) => {
+  let postid = req.body.imgURL
   Users.updateOne(
     {_id: req.params.id},
-    {$pull: {posts: req.params.postid}}
+    {$pull: {posts: postid}}
   )
 })
 
