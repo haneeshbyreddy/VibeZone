@@ -41,6 +41,22 @@ function App() {
     }
   };
 
+  const deletePost = async (imgUrl) => {
+    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/deletePost', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "imgURL": imgUrl})
+    })
+    if (response.ok) {
+      setRefreshPostToggle(!refreshPostToggle)
+      alert('Post added successfully!');
+    } else {
+      alert('Failed to add Post');
+    }
+  }
+
   return (
     <div className='wrapper'>
       <div className='content'>
@@ -51,15 +67,16 @@ function App() {
             <a><i className="fa fa-fw fa-search"></i> Search</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
             <button onClick={refreshPosts}>Refresh Posts</button>
-            <input type="text" value={inputValue} onChange={handleInputChange}/>
+            <input type="url" value={inputValue} onChange={handleInputChange}/>
             <button onClick={addPost}>Add New Post</button>
           </div>
         </div>
-        {user.posts.map((imgUrl) => (
-          <div className='post'>
+        {user.posts.map((imgUrl, index) => (
+          <div className='post' key={index}>
             <div className='post-info'>
               <img className='profile-image image' src={user.profileImage} alt='Img' />
               <div className='profile-name'>{user.name}</div>
+              <button className='delete_button' onClick={() => deletePost(imgUrl)}>Delete Post</button>
             </div>
             <img className='post-image image' src={imgUrl} alt='Post' />
           </div>
