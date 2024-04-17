@@ -29,6 +29,10 @@ app.post('/api/addUser', async (req, res) => {
   res.status(200).json(user)
 })
 
+app.post('/api/testPost', async (req, res) => {
+  res.status(202).json({ 'result': 'all good' })
+})
+
 app.post('/api/:id/addPost', async (req, res) => {
   let user = await Users.findById(req.params.id)
   if (!user) {
