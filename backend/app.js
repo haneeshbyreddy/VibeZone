@@ -34,7 +34,7 @@ app.post('/api/:id/addPost', async (req, res) => {
   if (!user) {
     return res.status(404).json({error: "User not found"})
   }
-  user.posts.push(req.body.imgURL)
+  user.posts.push(JSON.parse(req.body).imgURL)
   await user.save()
   res.status(200).json(user)
 })

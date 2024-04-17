@@ -31,7 +31,7 @@ function App() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: { "imgURL": inputValue }
+      body: JSON.stringify({ "imgURL": inputValue })
     });
     if (response.ok) {
       alert('Post added successfully!');
