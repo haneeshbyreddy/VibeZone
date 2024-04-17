@@ -6,7 +6,7 @@ function App() {
   const [refreshPosts, setRefreshPosts] = useState(false)
 
   useEffect( () => {
-    fetch('http://localhost:3001/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
+    fetch('http://127.0.0.1:3001/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
     .then(data => data.json())
     .then(json => setUser(json))
   }, [refreshPosts]);
