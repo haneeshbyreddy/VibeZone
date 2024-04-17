@@ -39,7 +39,7 @@ app.post('/api/:id/addPost', async (req, res) => {
   res.status(200).json(user)
 })
 
-app.post('/api/:id/deletePost/', async (res, req) => {
+app.post('/api/:id/deletePost/', async (req, res) => {
   let postid = req.body.imgURL
   Users.updateOne(
     {_id: req.params.id},
