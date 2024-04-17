@@ -31,7 +31,7 @@ function App() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "imgURL": inputValue })
+      body: { "imgURL": inputValue }
     });
     if (response.ok) {
       setRefreshPostToggle(!refreshPostToggle)
