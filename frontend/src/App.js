@@ -22,18 +22,22 @@ function App() {
   };
 
   const addPost = async () => {
-      let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/addUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: { imgURL: inputValue }
-      });
-      if (response.ok) {
-        alert('User added successfully!');
-      } else {
-        alert('Failed to add user');
-      }
+    if (!inputValue.startsWith('https://')) {
+      alert('URL must start with "https://"');
+      return;
+    }
+    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/addPost', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: { "imgURL": inputValue }
+    });
+    if (response.ok) {
+      alert('Post added successfully!');
+    } else {
+      alert('Failed to add Post');
+    }
   };
 
   return (
