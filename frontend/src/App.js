@@ -51,9 +51,9 @@ function App() {
     })
     if (response.ok) {
       setRefreshPostToggle(!refreshPostToggle)
-      alert('Post added successfully!');
+      alert('Post deleted successfully!');
     } else {
-      alert('Failed to add Post');
+      alert('Failed to delete Post');
     }
   }
 

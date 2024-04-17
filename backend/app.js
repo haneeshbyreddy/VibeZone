@@ -43,18 +43,18 @@ app.post('/api/:id/addPost', async (req, res) => {
   res.status(200).json(user)
 })
 
-app.post('/api/:id/deletePost/', async (req, res) => {
-    let user = await Users.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    let postIndex = user.posts.indexOf(req.body.imgURL);
-    if (postIndex === -1) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-    user.posts.splice(postIndex, 1);
-    await user.save();
-    res.status(200).json(user);
+app.post('/api/:id/deletePost', async (req, res) => {
+  let user = await Users.findById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  let postIndex = user.posts.indexOf(req.body.imgURL);
+  if (postIndex === -1) {
+    return res.status(404).json({ error: "Post not found" });
+  }
+  user.posts.splice(postIndex, 1);
+  await user.save();
+  res.status(200).json(user);
 })
 
 async function startServer(uri) {
