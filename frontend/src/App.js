@@ -27,7 +27,6 @@ function App() {
             <a><i className="fa fa-fw fa-search"></i> Search</a>
             <a><i className="fa fa-fw fa-envelope"></i> Messages</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
-            <img src='https://i.pinimg.com/236x/88/7d/74/887d74f66fb342cd831b69d98f8ecde5.jpg' ></img>
           </div>
         </div>
         {user.posts.map((imgUrl) => (
