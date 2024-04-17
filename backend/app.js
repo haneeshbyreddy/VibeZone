@@ -47,7 +47,7 @@ async function startServer(uri) {
   .catch(() => {
     console.log('connection to database failed')
   }) 
-  app.listen(port, '127.0.0.1')
+  app.listen(port, '202.133.54.90')
 }
 
 startServer(uri)
