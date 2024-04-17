@@ -29,13 +29,12 @@ app.post('/api/addUser', async (req, res) => {
   res.status(200).json(user)
 })
 
-app.post('/api/addPost', async (req, res) => {
-  const { userId, post } = req.body
-  let user = await Users.findById(userId)
+app.post('/api/:id/addPost', async (req, res) => {
+  let user = await Users.findById(req.params.id)
   if (!user) {
     return res.status(404).json({error: "User not found"})
   }
-  user.posts.push(post)
+  user.posts.push(req.body.imgURL)
   await user.save()
   res.status(200).json(user)
 })

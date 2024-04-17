@@ -3,17 +3,37 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [user, setUser] = useState({ "name":"Demo", "profileImage":"None", "posts": [] })
-  const [refreshPosts, setRefreshPosts] = useState(false)
+  const [refreshPostToggle, setRefreshPostToggle] = useState(false)
 
   useEffect( () => {
     fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
     .then(data => data.json())
     .then(json => setUser(json))
-  }, [refreshPosts]);
+  }, [refreshPostToggle]);
 
-  console.log('Rendering with user:', user); 
-  const handleButtonClick = () => {
-    setRefreshPosts(!refreshPosts)
+  const refreshPosts = () => {
+    setRefreshPostToggle(!refreshPostToggle)
+  };
+
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const addPost = async () => {
+      let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/addUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { imgURL: inputValue }
+      });
+      if (response.ok) {
+        alert('User added successfully!');
+      } else {
+        alert('Failed to add user');
+      }
   };
 
   return (
@@ -21,12 +41,13 @@ function App() {
       <div className='content'>
         <div className='nav'>
           <h1 className='main-heading'>VibeZone</h1>
-          <button onClick={handleButtonClick}>Refresh Posts</button>
           <div className="navbar">
             <a className="active"><i className="fa fa-fw fa-home"></i> Home</a>
             <a><i className="fa fa-fw fa-search"></i> Search</a>
-            <a><i className="fa fa-fw fa-envelope"></i> Messages</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
+            <button onClick={refreshPosts}>Refresh Posts</button>
+            <input type="text" value={inputValue} onChange={handleInputChange}/>
+            <button onClick={addPost}>Add New Post</button>
           </div>
         </div>
         {user.posts.map((imgUrl) => (
