@@ -69,7 +69,7 @@ function App() {
             <a><i className="fa fa-fw fa-search"></i> Search</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
             <button onClick={refreshPosts}>Refresh Posts</button>
-            <button onClick={() => {setShowPopup(!showPopup)}}>Add New Post</button>
+            <button onClick={() => {setShowPopup(!showPopup)}}>Add Post</button>
           </div>
         </div>
         { showPopup && (
