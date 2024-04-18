@@ -4,23 +4,20 @@ import React, { useState, useEffect } from 'react';
 function App() {
   const [user, setUser] = useState({ "name":"Demo", "profileImage":"None", "posts": [] })
   const [refreshPostToggle, setRefreshPostToggle] = useState(false)
+  const [inputValue, setInputValue] = useState('');
+  const [showPopup, setShowPopup] = useState(true);
 
+  // Refresh Posts
   useEffect( () => {
     fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
     .then(data => data.json())
     .then(json => setUser(json))
   }, [refreshPostToggle]);
-
   const refreshPosts = () => {
     setRefreshPostToggle(!refreshPostToggle)
   };
 
-  const [inputValue, setInputValue] = useState('');
-
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
+  // Add Post API
   const addPost = async () => {
     if (!inputValue.startsWith('https://')) {
       alert('URL must start with "https://"');
@@ -35,12 +32,14 @@ function App() {
     });
     if (response.ok) {
       setRefreshPostToggle(!refreshPostToggle)
-      alert('Post added successfully!');
+      setShowPopup(!showPopup)
+      setInputValue('')
     } else {
       alert('Failed to add Post');
     }
   };
 
+  // Delete Post API
   const deletePost = async (imgUrl) => {
     let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/deletePost', {
       method: 'POST',
@@ -57,6 +56,7 @@ function App() {
     }
   }
 
+  // APP return
   return (
     <div className='wrapper'>
       <div className='content'>
@@ -67,10 +67,32 @@ function App() {
             <a><i className="fa fa-fw fa-search"></i> Search</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
             <button onClick={refreshPosts}>Refresh Posts</button>
-            <input type="url" value={inputValue} onChange={handleInputChange}/>
-            <button onClick={addPost}>Add New Post</button>
+            <button onClick={() => {setShowPopup(!showPopup)}}>Add New Post</button>
           </div>
         </div>
+        { showPopup && (
+          // <h1>Hello</h1>
+          <div id="popupOverlay" className="overlay-container show">
+            <div className="popup-box">
+              <h2 style={{color: 'green'}}>New Post</h2>
+              <form className="form-container" onSubmit={(e) => { e.preventDefault(); addPost(); }}>
+                <label className="form-label" htmlFor="email">Image:</label>
+                <input
+                  className="form-input"
+                  type="url"
+                  placeholder="Enter URL of the post"
+                  id="email"
+                  name="email"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  required
+                />
+                <button className="btn-submit" type="submit">Submit</button>
+              </form>
+              <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button>
+            </div>
+          </div>
+        )}
         {user.posts.map((imgUrl, index) => (
           <div className='post' key={index}>
             <div className='post-info'>
@@ -78,7 +100,9 @@ function App() {
               <div className='profile-name'>{user.name}</div>
               <button className='delete_button' onClick={() => deletePost(imgUrl)}>Delete Post</button>
             </div>
-            <img className='post-image image' src={imgUrl} alt='Post' />
+            <div className='post-image'>
+              <img src={imgUrl} alt='Post' />
+            </div>
           </div>
         ))}
       </div>
