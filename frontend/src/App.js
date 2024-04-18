@@ -1,3 +1,4 @@
+import ReactPullToRefresh from 'react-pull-to-refresh';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 
@@ -5,7 +6,7 @@ function App() {
   const [user, setUser] = useState({ "name":"Demo", "profileImage":"None", "posts": [] })
   const [refreshPostToggle, setRefreshPostToggle] = useState(false)
   const [inputValue, setInputValue] = useState('');
-  const [showPopup, setShowPopup] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Refresh Posts
   useEffect( () => {
@@ -15,6 +16,7 @@ function App() {
   }, [refreshPostToggle]);
   const refreshPosts = () => {
     setRefreshPostToggle(!refreshPostToggle)
+    alert("Posts refreshed")
   };
 
   // Add Post API
