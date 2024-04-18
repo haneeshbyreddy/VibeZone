@@ -1,22 +1,23 @@
-import ReactPullToRefresh from 'react-pull-to-refresh';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [user, setUser] = useState({ "name":"Demo", "profileImage":"None", "posts": [] })
-  const [refreshPostToggle, setRefreshPostToggle] = useState(false)
+  const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
+  const [refreshPostToggle, setRefreshPostToggle] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const videoRefs = useRef([]);
 
   // Refresh Posts
-  useEffect( () => {
+  useEffect(() => {
     fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
-    .then(data => data.json())
-    .then(json => setUser(json))
+      .then(data => data.json())
+      .then(json => setUser(json));
   }, [refreshPostToggle]);
+
   const refreshPosts = () => {
-    setRefreshPostToggle(!refreshPostToggle)
-    alert("Posts refreshed")
+    setRefreshPostToggle(!refreshPostToggle);
+    alert("Posts refreshed");
   };
 
   // Add Post API
@@ -33,9 +34,9 @@ function App() {
       body: JSON.stringify({ "imgURL": inputValue })
     });
     if (response.ok) {
-      setRefreshPostToggle(!refreshPostToggle)
-      setShowPopup(!showPopup)
-      setInputValue('')
+      setRefreshPostToggle(!refreshPostToggle);
+      setShowPopup(!showPopup);
+      setInputValue('');
     } else {
       alert('Failed to add Post');
     }
@@ -48,15 +49,49 @@ function App() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "imgURL": imgUrl})
-    })
+      body: JSON.stringify({ "imgURL": imgUrl })
+    });
     if (response.ok) {
-      setRefreshPostToggle(!refreshPostToggle)
+      setRefreshPostToggle(!refreshPostToggle);
       alert('Post deleted successfully!');
     } else {
       alert('Failed to delete Post');
     }
+  };
+
+  function isImage(url) {
+    return /\.(jpg|jpeg|png|gif)$/i.test(url);
   }
+
+  // auto play video if in view
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5
+    };
+    const callback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const video = entry.target;
+          video.play();
+        } else {
+          const video = entry.target;
+          video.pause();
+        }
+      });
+    };
+    videoRefs.current.forEach((videoRef) => {
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(videoRef);
+    });
+    return () => {
+      videoRefs.current.forEach((videoRef) => {
+        const observer = new IntersectionObserver(callback, options);
+        observer.unobserve(videoRef);
+      });
+    };
+  }, [user.posts]);
 
   // APP return
   return (
@@ -69,14 +104,13 @@ function App() {
             <a><i className="fa fa-fw fa-search"></i> Search</a>
             <a><i className="fa fa-fw fa-user"></i> Profile</a>
             <button onClick={refreshPosts}>Refresh Posts</button>
-            <button onClick={() => {setShowPopup(!showPopup)}}>Add Post</button>
+            <button onClick={() => { setShowPopup(!showPopup) }}>Add Post</button>
           </div>
         </div>
-        { showPopup && (
-          // <h1>Hello</h1>
+        {showPopup && (
           <div id="popupOverlay" className="overlay-container show">
             <div className="popup-box">
-              <h2 style={{color: 'green'}}>New Post</h2>
+              <h2 style={{ color: 'green' }}>New Post</h2>
               <form className="form-container" onSubmit={(e) => { e.preventDefault(); addPost(); }}>
                 <label className="form-label" htmlFor="email">Image:</label>
                 <input
@@ -95,15 +129,22 @@ function App() {
             </div>
           </div>
         )}
-        {user.posts.map((imgUrl, index) => (
+        {user.posts.map((mediaUrl, index) => (
           <div className='post' key={index}>
             <div className='post-info'>
               <img className='profile-image image' src={user.profileImage} alt='Img' />
               <div className='profile-name'>{user.name}</div>
-              <button className='delete_button' onClick={() => deletePost(imgUrl)}>Delete Post</button>
+              <button className='delete_button' onClick={() => deletePost(mediaUrl)}>Delete Post</button>
             </div>
-            <div className='post-image'>
-              <img src={imgUrl} alt='Post' />
+            <div className='post-media'>
+              {isImage(mediaUrl) ? (
+                <img src={mediaUrl} alt='Post' />
+              ) : (
+                <video ref={(el) => (videoRefs.current[index] = el)} controls muted>
+                  <source src={mediaUrl} type='video/mp4' />
+                  Your browser does not support the video tag.
+                </video>
+              )}
             </div>
           </div>
         ))}
