@@ -50,7 +50,7 @@ app.post('/api/addUser', async (req, res) => {
   res.status(200).json(user)
 })
 
-app.post('/api/661e94247ad53f4fefd1fdf4/uploadFile', (req, res) => {
+app.post('/api/:id/uploadFile', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
       console.log(err)
@@ -66,7 +66,7 @@ app.post('/api/:id/deletePost', async (req, res) => {
   if (!imgUrl) {
     return res.status(400).json({ error: "Image URL is required"})
   }
-  const filename = path.basename(imgURL)
+  const filename = path.basename(imgUrl)
   const filePath = path.join(__dirname, 'uploads', filename)
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: 'File not found' })

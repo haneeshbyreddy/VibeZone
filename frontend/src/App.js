@@ -22,12 +22,11 @@ function App() {
 
   // Add Post API
   const addPost = async (formData) => {
-    console.log(formData.entries())
     let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData)
     console.log(response)
-    if (!response.ok) {
-      alert('Failed to add Post');
-    }
+    if (response.status < 200 || response.status >= 300) {
+      alert('Post Not Added');
+    } 
     setShowPopup(!showPopup);
     setRefreshPostToggle(!refreshPostToggle);
   };
@@ -95,7 +94,6 @@ function App() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log(file)
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
