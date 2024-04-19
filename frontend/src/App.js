@@ -43,7 +43,7 @@ function App() {
   };
 
   // Delete Post API
-  const deletePost = async (imgUrl) => {
+  const deletePost = async (imgUrl, index) => {
     let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/deletePost', {
       method: 'POST',
       headers: {
@@ -52,8 +52,10 @@ function App() {
       body: JSON.stringify({ "imgURL": imgUrl })
     });
     if (response.ok) {
-      setRefreshPostToggle(!refreshPostToggle);
-      alert('Post deleted successfully!');
+      setUser(user => ({
+        ...user,
+        posts: user.posts.filter((_, i) => i !== index)
+      }));
     } else {
       alert('Failed to delete Post');
     }
@@ -70,28 +72,37 @@ function App() {
       rootMargin: '0px',
       threshold: 0.5
     };
+
     const callback = (entries) => {
       entries.forEach((entry) => {
+        const video = entry.target;
         if (entry.isIntersecting) {
-          const video = entry.target;
           video.play();
         } else {
-          const video = entry.target;
-          video.pause();
+          setTimeout(() => {
+            video.pause();
+          }, 300);
         }
       });
     };
+
+    // Create a single Intersection Observer instance
+    const observer = new IntersectionObserver(callback, options);
+
+    // Observe each videoRef
     videoRefs.current.forEach((videoRef) => {
-      const observer = new IntersectionObserver(callback, options);
-      observer.observe(videoRef);
+      if (videoRef instanceof Element) {
+        observer.observe(videoRef);
+      }
     });
+
+    // Cleanup function
     return () => {
-      videoRefs.current.forEach((videoRef) => {
-        const observer = new IntersectionObserver(callback, options);
-        observer.unobserve(videoRef);
-      });
+      // Disconnect the observer
+      observer.disconnect();
     };
   }, [user.posts]);
+
 
   // APP return
   return (
@@ -134,12 +145,13 @@ function App() {
             <div className='post-info'>
               <img className='profile-image image' src={user.profileImage} alt='Img' />
               <div className='profile-name'>{user.name}</div>
-              <button className='delete_button' onClick={() => deletePost(mediaUrl)}>Delete Post</button>
+              <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}>Delete Post</button>
             </div>
             <div className='post-media'>
               {isImage(mediaUrl) ? (
                 <img src={mediaUrl} alt='Post' />
               ) : (
+                // <video controls muted>
                 <video ref={(el) => (videoRefs.current[index] = el)} controls muted>
                   <source src={mediaUrl} type='video/mp4' />
                   Your browser does not support the video tag.
