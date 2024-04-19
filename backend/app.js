@@ -1,11 +1,22 @@
 const express = require('express')
 const app = express()
+const path = require('path')
+const fs = require('fs')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const Users = require('./models/users.model.js')
 const multer = require('multer');
-const upload = multer({dest: 'upload/'})
 const uri = "mongodb+srv://Demo:Demo@vibezone.kohhjtv.mongodb.net/";
+
+const storage = multer.diskStorage({
+  destination: './uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({
+  storage: storage
+}).single('file');
 
 let port = '3001'
 
@@ -18,13 +29,16 @@ app.get('/api/getAllUsers', async (req, res) => {
   res.send(allUsers)
 })
 
-app.get('/api/:id', async (req, res) => {
-  let user = await Users.findById(req.params.id)
-  if (!user) {
-    return res.status(404).json({ error: "User not found"})
-  }
-  res.status(200).json(user)
+app.get('/api/661e94247ad53f4fefd1fdf4', async (req, res) => {
+  fs.readdir('./uploads', (err, files) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.status(200).json(files);
+  });
 })
+
+app.use('/uploads', express.static('uploads'));
 
 app.post('/api/addUser', async (req, res) => {
   let user = await Users.create(req.body)
@@ -35,11 +49,17 @@ app.post('/api/testPost', async (req, res) => {
   res.status(202).json({ 'result': 'all good' })
 })
 
-app.post('/api/:id/uploadFile', upload.single('files'), async (req, res) => {
-  console.log(req.body)
-  console.log(req.files)
-  res.json({message: "sucessfully uploaded files"})
-})
+app.post('/api/661e94247ad53f4fefd1fdf4/uploadFile', (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err)
+      return res.status(500).send(err);
+    }
+    console.log('File uploaded successfully');
+    res.status(200).send('File uploaded successfully');
+  });
+});
+
 
 app.post('/api/:id/addPost', async (req, res) => {
   let user = await Users.findById(req.params.id)
@@ -71,7 +91,7 @@ async function startServer(uri) {
   })
   .catch(() => {
     console.log('connection to database failed')
-  }) 
+  })
   app.listen(port, '202.133.54.90')
 }
 

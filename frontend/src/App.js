@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
@@ -21,21 +22,14 @@ function App() {
 
   // Add Post API
   const addPost = async (formData) => {
-    console.log(formData)
-    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      body: formData
-    });
+    console.log(formData.entries())
+    let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData)
     console.log(response)
-    if (response.ok) {
-      setRefreshPostToggle(!refreshPostToggle);
-      setShowPopup(!showPopup);
-    } else {
+    if (!response.ok) {
       alert('Failed to add Post');
     }
+    setShowPopup(!showPopup);
+    setRefreshPostToggle(!refreshPostToggle);
   };
 
   // Delete Post API
@@ -101,9 +95,13 @@ function App() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    console.log(file)
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
+      // for (const entry of formData.entries()) {
+      //   console.log(entry);
+      // }
       addPost(formData);
     }
   };
