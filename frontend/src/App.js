@@ -6,6 +6,7 @@ function App() {
   const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
   const [refreshPostToggle, setRefreshPostToggle] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(false)
   const videoRefs = useRef([]);
 
   // Refresh Posts
@@ -22,11 +23,13 @@ function App() {
 
   // Add Post API
   const addPost = async (formData) => {
+    setLoading(true)
     let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData)
     console.log(response)
     if (response.status < 200 || response.status >= 300) {
       alert('Post Not Added');
     } 
+    setLoading(false)
     setShowPopup(!showPopup);
     setRefreshPostToggle(!refreshPostToggle);
   };
@@ -133,6 +136,7 @@ function App() {
                   onChange={handleFileChange}
                 />
               </form>
+              { loading && <div><i className="fas fa-spinner fa-spin"></i><p>Loading Do not close</p></div>}
               <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button>
             </div>
           </div>
