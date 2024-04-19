@@ -4,7 +4,6 @@ import './App.css';
 function App() {
   const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
   const [refreshPostToggle, setRefreshPostToggle] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const videoRefs = useRef([]);
 
@@ -21,22 +20,19 @@ function App() {
   };
 
   // Add Post API
-  const addPost = async () => {
-    if (!inputValue.startsWith('https://')) {
-      alert('URL must start with "https://"');
-      return;
-    }
-    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/addPost', {
+  const addPost = async (formData) => {
+    console.log(formData)
+    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       },
-      body: JSON.stringify({ "imgURL": inputValue })
+      body: formData
     });
+    console.log(response)
     if (response.ok) {
       setRefreshPostToggle(!refreshPostToggle);
       setShowPopup(!showPopup);
-      setInputValue('');
     } else {
       alert('Failed to add Post');
     }
@@ -103,6 +99,15 @@ function App() {
     };
   }, [user.posts]);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      addPost(formData);
+    }
+  };
+
 
   // APP return
   return (
@@ -122,19 +127,15 @@ function App() {
           <div id="popupOverlay" className="overlay-container show">
             <div className="popup-box">
               <h2 style={{ color: 'green' }}>New Post</h2>
-              <form className="form-container" onSubmit={(e) => { e.preventDefault(); addPost(); }}>
-                <label className="form-label" htmlFor="email">Image:</label>
+              <form className="form-container">
+                <label className="form-label" htmlFor="file">File:</label>
                 <input
                   className="form-input"
-                  type="url"
-                  placeholder="Enter URL of the post"
-                  id="email"
-                  name="email"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  required
+                  type="file"
+                  id="file"
+                  name="file"
+                  onChange={handleFileChange}
                 />
-                <button className="btn-submit" type="submit">Submit</button>
               </form>
               <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button>
             </div>
