@@ -3,6 +3,8 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const Users = require('./models/users.model.js')
+const multer = require('multer');
+const upload = mutler({dest: 'upload/'})
 const uri = "mongodb+srv://Demo:Demo@vibezone.kohhjtv.mongodb.net/";
 
 let port = '3001'
@@ -31,6 +33,12 @@ app.post('/api/addUser', async (req, res) => {
 
 app.post('/api/testPost', async (req, res) => {
   res.status(202).json({ 'result': 'all good' })
+})
+
+app.post('/api/:id/uploadFile', upload.single('files'), async (req, res) => {
+  console.log(req.body)
+  console.log(req.files)
+  res.json({message: "sucessfully uploaded files"})
 })
 
 app.post('/api/:id/addPost', async (req, res) => {
