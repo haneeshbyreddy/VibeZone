@@ -4,7 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const Users = require('./models/users.model.js')
 const multer = require('multer');
-const upload = mutler({dest: 'upload/'})
+const upload = multer({dest: 'upload/'})
 const uri = "mongodb+srv://Demo:Demo@vibezone.kohhjtv.mongodb.net/";
 
 let port = '3001'
