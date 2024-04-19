@@ -29,13 +29,18 @@ app.get('/api/getAllUsers', async (req, res) => {
   res.send(allUsers)
 })
 
-app.get('/api/661e94247ad53f4fefd1fdf4', async (req, res) => {
+app.get('/api/:id', async (req, res) => {
+  let user = await Users.findById(req.params.id)
+  if (!user) {
+    return res.status(404).json({ error: "User not found"})
+  }
   fs.readdir('./uploads', (err, files) => {
     if (err) {
       return res.status(500).send(err);
     }
-    res.status(200).json(files);
   });
+  user.posts = files.map(file => `https://api.vibezone.space/uploads/${file}`)
+  res.status(200).json(user)
 })
 
 app.use('/uploads', express.static('uploads'));
