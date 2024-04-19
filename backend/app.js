@@ -38,9 +38,9 @@ app.get('/api/:id', async (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
+    user.posts = files.map(file => `https://api.vibezone.space/uploads/${file}`)
+    res.status(200).json(user)
   });
-  user.posts = files.map(file => `https://api.vibezone.space/uploads/${file}`)
-  res.status(200).json(user)
 })
 
 app.use('/uploads', express.static('uploads'));
@@ -48,10 +48,6 @@ app.use('/uploads', express.static('uploads'));
 app.post('/api/addUser', async (req, res) => {
   let user = await Users.create(req.body)
   res.status(200).json(user)
-})
-
-app.post('/api/testPost', async (req, res) => {
-  res.status(202).json({ 'result': 'all good' })
 })
 
 app.post('/api/661e94247ad53f4fefd1fdf4/uploadFile', (req, res) => {
@@ -65,29 +61,18 @@ app.post('/api/661e94247ad53f4fefd1fdf4/uploadFile', (req, res) => {
   });
 });
 
-
-app.post('/api/:id/addPost', async (req, res) => {
-  let user = await Users.findById(req.params.id)
-  if (!user) {
-    return res.status(404).json({error: "User not found"})
-  }
-  user.posts.push(req.body.imgURL)
-  await user.save()
-  res.status(200).json(user)
-})
-
 app.post('/api/:id/deletePost', async (req, res) => {
-  let user = await Users.findById(req.params.id);
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
+  const imgUrl = req.body.imgURL;
+  if (!imgUrl) {
+    return res.status(400).json({ error: "Image URL is required"})
   }
-  let postIndex = user.posts.indexOf(req.body.imgURL);
-  if (postIndex === -1) {
-    return res.status(404).json({ error: "Post not found" });
+  const filename = path.basename(imgURL)
+  const filePath = path.join(__dirname, 'uploads', filename)
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: 'File not found' })
   }
-  user.posts.splice(postIndex, 1);
-  await user.save();
-  res.status(200).json(user);
+  fs.unlinkSync(filePath)
+  res.status(200).json({ error: 'Post deleted successfully' })
 })
 
 async function startServer(uri) {
