@@ -46,20 +46,25 @@ body {font-family: Arial, Helvetica, sans-serif;}
   padding: 5px;
 }
 
-.navbar a, .navbar button, .delete_button {
+.navbar a, .delete_button {
   float: left;
   color: white;
   background-color: #555;
   text-decoration: none;
-  padding: 12px 25px;
+  padding: 12px 15px;
   font-size: 1rem;
   white-space: nowrap;
   border: none;
   border-radius: 25px;
 }
 
+.navbar a {
+  margin: 0px 3px;
+}
+
 .navbar a:hover, .navbar button:hover, .delete_button:hover {
   background-color: #000;
+  cursor: pointer;
 }
 
 .navbar .active {
@@ -194,8 +199,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
     padding: 12px 24px; 
     border: none; 
     border-radius: 8px; 
-    display: flex;
-    justify-content: center;
     cursor: pointer; 
     transition: background-color 0.3s ease, color 0.3s ease; 
 } 
@@ -234,3 +237,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
     display: flex; 
     opacity: 1; 
 } 
+.progress-container {
+  border: 5px solid black;
+}
+.progress-bar {
+  background-color: lightblue;
+}

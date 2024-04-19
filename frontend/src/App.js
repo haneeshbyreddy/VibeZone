@@ -7,6 +7,7 @@ function App() {
   const [refreshPostToggle, setRefreshPostToggle] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
   const videoRefs = useRef([]);
 
   // Refresh Posts
@@ -24,12 +25,18 @@ function App() {
   // Add Post API
   const addPost = async (formData) => {
     setLoading(true)
-    let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData)
+    let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData, {
+      onUploadProgress: ProgressEvent => {
+        const percentCompleted = Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
+        setUploadProgress(percentCompleted)
+      }
+    })
     console.log(response)
     if (response.status < 200 || response.status >= 300) {
       alert('Post Not Added');
     } 
     setLoading(false)
+    setUploadProgress(0)
     setShowPopup(!showPopup);
     setRefreshPostToggle(!refreshPostToggle);
   };
@@ -116,10 +123,10 @@ function App() {
           <h1 className='main-heading'>VibeZone</h1>
           <div className="navbar">
             <a className="active"><i className="fa fa-fw fa-home"></i> Home</a>
-            <a><i className="fa fa-fw fa-search"></i> Search</a>
-            <a><i className="fa fa-fw fa-user"></i> Profile</a>
-            <button onClick={refreshPosts}>Refresh Posts</button>
-            <button onClick={() => { setShowPopup(!showPopup) }}>Add Post</button>
+            <a ><i className="fa fa-fw fa-search"></i> Search</a>
+            <a ><i className="fa fa-fw fa-user"></i> Profile</a>
+            <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i> Refresh Posts</a>
+            <a onClick={() => { setShowPopup(!showPopup) }}><i className="fa fa-fw fa-plus"></i> Add Post</a>
           </div>
         </div>
         {showPopup && (
@@ -127,7 +134,7 @@ function App() {
             <div className="popup-box">
               <h2 style={{ color: 'green' }}>New Post</h2>
               <form className="form-container">
-                <label className="form-label" htmlFor="file">File:</label>
+                {/* <label className="form-label" htmlFor="file">File:</label> */}
                 <input
                   className="form-input"
                   type="file"
@@ -136,8 +143,12 @@ function App() {
                   onChange={handleFileChange}
                 />
               </form>
-              { loading && <div><i className="fas fa-spinner fa-spin"></i><p>Loading Do not close</p></div>}
-              <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button>
+              { loading && (
+                <div className="progress-container">
+                  <div className="progress-bar" style={{ width: `${uploadProgress}%` }}>{uploadProgress}%</div>
+                </div>
+              )}
+              { !loading && <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button> }
             </div>
           </div>
         )}
@@ -146,7 +157,7 @@ function App() {
             <div className='post-info'>
               <img className='profile-image image' src={user.profileImage} alt='Img' />
               <div className='profile-name'>{user.name}</div>
-              <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}>Delete Post</button>
+              <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i> Delete Post</button>
             </div>
             <div className='post-media'>
               {isImage(mediaUrl) ? (
