@@ -9,6 +9,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const videoRefs = useRef([]);
+  const cancelTokenSource = useRef(axios.CancelToken.source());
 
   // Refresh Posts
   useEffect(() => {
@@ -25,20 +26,30 @@ function App() {
   // Add Post API
   const addPost = async (formData) => {
     setLoading(true)
-    let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData, {
-      onUploadProgress: ProgressEvent => {
-        const percentCompleted = Math.round((ProgressEvent.loaded * 100) / ProgressEvent.total)
-        setUploadProgress(percentCompleted)
+    try {
+      let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData, {
+        onUploadProgress: ProgressEvent => {
+          const percentCompleted = ((ProgressEvent.loaded * 100) / ProgressEvent.total).toFixed(2)
+          setUploadProgress(percentCompleted)
+        },
+        cancelToken: cancelTokenSource.current.token
+      })
+      console.log(response)
+      if (response.status < 200 || response.status >= 300) {
+        alert('Post Not Added');
+      } 
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log('Upload canceled by user')
+      } else {
+        console.log('Error uploading file:', error)
       }
-    })
-    console.log(response)
-    if (response.status < 200 || response.status >= 300) {
-      alert('Post Not Added');
-    } 
+    }
     setLoading(false)
     setUploadProgress(0)
     setShowPopup(!showPopup);
     setRefreshPostToggle(!refreshPostToggle);
+    cancelTokenSource.current.cancel('Operation canceled')
   };
 
   // Delete Post API
@@ -110,9 +121,16 @@ function App() {
       // for (const entry of formData.entries()) {
       //   console.log(entry);
       // }
+      cancelTokenSource.current = axios.CancelToken.source()
       addPost(formData);
     }
   };
+  const handleCancelUpload = () => {
+    cancelTokenSource.current.cancel('Upload cancelled by user')
+    setLoading(!loading)
+    setUploadProgress(0)
+    setShowPopup(!showPopup)
+  }
 
 
   // APP return
@@ -144,10 +162,11 @@ function App() {
                 />
               </form>
               { loading && (
-                <div className="progress-container">
-                  <div className="progress-bar" style={{ width: `${uploadProgress}%` }}>{uploadProgress}%</div>
-                </div>
+                  <div className="progress-container">
+                    <div className="progress-bar" style={{ width: `${uploadProgress}%` }}>{uploadProgress}%</div>
+                  </div>
               )}
+              {loading && <button className='btn-cancel' onClick={handleCancelUpload}>Cancel</button>}
               { !loading && <button className="btn-close-popup" onClick={() => setShowPopup(false)}>Close</button> }
             </div>
           </div>
