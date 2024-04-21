@@ -140,11 +140,11 @@ function App() {
         <div className='nav'>
           <h1 className='main-heading'>VibeZone</h1>
           <div className="navbar">
-            <a className="active"><i className="fa fa-fw fa-home"></i> Home</a>
-            <a ><i className="fa fa-fw fa-search"></i> Search</a>
-            <a ><i className="fa fa-fw fa-user"></i> Profile</a>
-            <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i> Refresh Posts</a>
-            <a onClick={() => { setShowPopup(!showPopup) }}><i className="fa fa-fw fa-plus"></i> Add Post</a>
+            <a className="active"><i className="fa fa-fw fa-home"></i></a>
+            <a ><i className="fa fa-fw fa-search"></i></a>
+            <a ><i className="fa fa-fw fa-user"></i> </a>
+            <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i></a>
+            <a onClick={() => { setShowPopup(!showPopup) }}><i className="fa fa-fw fa-plus"></i></a>
           </div>
         </div>
         {showPopup && (
@@ -171,24 +171,28 @@ function App() {
             </div>
           </div>
         )}
+        <div className='divider'></div>
         {user.posts.map((mediaUrl, index) => (
-          <div className='post' key={index}>
-            <div className='post-info'>
-              <img className='profile-image image' src={user.profileImage} alt='Img' />
-              <div className='profile-name'>{user.name}</div>
-              <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i> Delete Post</button>
+          <div style={{ width: '100%' }}>
+            <div className='post' key={index}>
+              <div className='post-info'>
+                <img className='profile-image image' src={user.profileImage} alt='Img' />
+                <p className='profile-name' style={{ color: 'white' }}>{user.name}</p>
+                <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i></button>
+              </div>
+              <div className='post-media'>
+                {isImage(mediaUrl) ? (
+                  <img src={mediaUrl} alt='Post' />
+                ) : (
+                  // <video controls muted>
+                  <video ref={(el) => (videoRefs.current[index] = el)} controls muted>
+                    <source src={mediaUrl} type='video/mp4' />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
             </div>
-            <div className='post-media'>
-              {isImage(mediaUrl) ? (
-                <img src={mediaUrl} alt='Post' />
-              ) : (
-                // <video controls muted>
-                <video ref={(el) => (videoRefs.current[index] = el)} controls muted>
-                  <source src={mediaUrl} type='video/mp4' />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-            </div>
+            <div className='divider'></div>
           </div>
         ))}
       </div>

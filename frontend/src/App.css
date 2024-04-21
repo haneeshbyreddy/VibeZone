@@ -8,6 +8,7 @@ html, body {
   width: 100vw;
   display: flex;
   justify-content: space-around;
+  background-color: black;
 }
 .content {
   width: 700px;
@@ -15,7 +16,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: lightslategrey;
+  background-color: black;
 }
 .nav{
   display: flex;
@@ -29,8 +30,8 @@ html, body {
   font-family: 'Brush Script MT', cursive;
   font-size: 25px;
   height: 30%;
-  text-shadow: 5px 5px 6px rgb(16, 14, 14);
-  color:rgb(16, 15, 15);
+  text-shadow: 5px 5px 6px;
+  color: lightblue;
 }
 
 body {font-family: Arial, Helvetica, sans-serif;}
@@ -44,6 +45,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   display: flex;
   justify-content: space-around;
   padding: 5px;
+  background-color: black;
 }
 
 .navbar a, .delete_button {
@@ -56,14 +58,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
   white-space: nowrap;
   border: none;
   border-radius: 25px;
-}
-
-.navbar a {
   margin: 0px 3px;
+  background-color: black;
 }
 
 .navbar a:hover, .navbar button:hover, .delete_button:hover {
-  background-color: #000;
+  background-color: gray;
   cursor: pointer;
 }
 
@@ -91,7 +91,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: 10px 0px;
   padding: 10px 0px;
   border-radius: 15px;
-  background-color: whitesmoke;
+  background-color: black;
 }
 .post-info {
   display: flex;
@@ -245,4 +245,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 .progress-bar {
   background-color: lightskyblue;
+}
+.divider {
+  margin-top: 10px;
+  width: 100%;
+  height: 1px;
+  background-color: white;
 }
