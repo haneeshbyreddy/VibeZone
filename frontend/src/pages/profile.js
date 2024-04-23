@@ -39,7 +39,12 @@ function Profile() {
                 </div>
                 <div className="profile_description">{user.description}</div>
             </div>
-            <div className='divider'></div>
+            <div className='divider' id='img_divider'></div>
+            <div className='profile_images'>
+                {user.posts.map(mediaUrl => (
+                    <img src={mediaUrl}></img>
+                ))}
+            </div>
         </div>
     </div>
     )
