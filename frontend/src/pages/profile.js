@@ -34,7 +34,7 @@ function Profile() {
                     </div>
                     <div className="connections_count">
                         <p>Connections</p>
-                        <p>{user.connections.length}</p>
+                        <p>None</p>
                     </div>
                 </div>
                 <div className="profile_description">{user.description}</div>
