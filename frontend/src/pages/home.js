@@ -172,7 +172,7 @@ function Home() {
           </div>
         )}
         <div className='divider'></div>
-        {user.posts.slice().reverse().map((mediaUrl, index) => (
+        {user.posts.map((mediaUrl, index) => (
           <div style={{ width: '100%' }}>
             <div className='post' key={index}>
               <div className='post-info'>
