@@ -178,7 +178,8 @@ function Home() {
               <div className='post-info'>
                 <img className='profile-image image' src={user.profileImage} alt='Img' />
                 <p className='profile-name' style={{ color: 'white' }}>{user.name}</p>
-                <button className='delete_button' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i></button>
+                <a className='download' href={mediaUrl} download><i className='fa fa-fw fa-download'></i></a>
+                <a className='delete' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i></a>
               </div>
               <div className='post-media'>
                 {isImage(mediaUrl) ? (

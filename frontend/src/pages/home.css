@@ -43,13 +43,11 @@ body {font-family: Arial, Helvetica, sans-serif;}
   border-radius: 15px;
   overflow: auto;
   display: flex;
-  justify-content: space-around;
   padding: 5px;
   background-color: black;
 }
 
-.navbar a, .delete_button {
-  float: left;
+.navbar a, .delete, .download {
   color: white;
   background-color: #555;
   text-decoration: none;
@@ -61,7 +59,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   background-color: black;
 }
 
-.navbar a:hover, .navbar button:hover, .delete_button:hover {
+.navbar a:hover, .navbar button:hover, .delete:hover, .download:hover {
   background-color: gray;
   cursor: pointer;
 }
@@ -125,9 +123,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin: 0px 10px;
 }
 
-.delete_button {
+.download {
   margin-left: auto;
-  margin-right: 3px;
 }
 
 /* Popup styling */

@@ -53,12 +53,16 @@ function Profile() {
             <div className='profile_media'>
                 {user.posts.slice().reverse().map(mediaUrl => (
                     isImage(mediaUrl) ? (
-                    <img src={mediaUrl} alt='Post' />
+                        <a href={mediaUrl}>
+                            <img src={mediaUrl} alt='Post' className='profile_media_img'/>
+                        </a>
                     ) : (
-                    <video controls muted>
-                        <source src={mediaUrl} type='video/mp4' />
-                        Your browser does not support the video tag.
-                    </video>
+                        <a href={mediaUrl}>
+                            <video controls muted className='profile_media_video'>
+                                <source src={mediaUrl} type='video/mp4' />
+                                Your browser does not support the video tag.
+                            </video>
+                        </a>
                     )
                 ))}
             </div>
