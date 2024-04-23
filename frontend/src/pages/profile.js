@@ -51,7 +51,7 @@ function Profile() {
                 <div className="profile_description">{user.description}</div>
             </div>
             <div className='profile_media'>
-                {user.posts.map(mediaUrl => (
+                {user.posts.slice().reverse().map(mediaUrl => (
                     isImage(mediaUrl) ? (
                     <img src={mediaUrl} alt='Post' />
                     ) : (
