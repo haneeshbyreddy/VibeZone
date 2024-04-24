@@ -3,6 +3,7 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
+    Navigate
 } from "react-router-dom";
 import Home from "./pages/home";
 import Profile from "./pages/profile";
@@ -12,21 +13,19 @@ function App() {
 
     const handleUserChange = (selectedUserId) => {
         setUserId(selectedUserId);
-        console.log(selectedUserId)
     };
 
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<Navigate to={`/${userId}`} />} />
                 {/* Pass userId and onUserChange as props to both components */}
                 <Route
-                    exact
-                    path='/'
+                    path='/:userId'
                     element={<Home userId={userId} onUserChange={handleUserChange} />}
                 />
                 <Route
-                    exact
-                    path='/profile'
+                    path='/:userId/profile'
                     element={<Profile userId={userId} onUserChange={handleUserChange} />}
                 />
             </Routes>

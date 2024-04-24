@@ -44,13 +44,13 @@ function Profile({ userId, onUserChange }) {
                 <div className="nav">
                     <h1 className="main-heading">VibeZone</h1>
                     <div className="navbar">
-                        <a href="/" className={pathname === '/' ? 'active' : ''}>
+                        <a href={`/${userId}`} className={pathname === '/' ? 'active' : ''}>
                             <i className="fa fa-fw fa-home"></i>
                         </a>
                         <a>
                             <i className="fa fa-fw fa-search"></i>
                         </a>
-                        <a href="/profile" className={pathname === '/profile' ? 'active' : ''}>
+                        <a href={`/${userId}/profile`} className={pathname === '/profile' ? 'active' : ''}>
                             <i className="fa fa-fw fa-user"></i>{' '}
                         </a>
                         <a onClick={refreshPosts}>
