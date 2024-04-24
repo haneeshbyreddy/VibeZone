@@ -67,6 +67,8 @@ function Profile({ userId, onUserChange }) {
                 </select>
                 <div className="divider"></div>
                 <div className="profile_info">
+                    <h1 style={{color:'white'}}>{user.name}</h1>
+
                     <div className="profile_stats">
                         <img className="profile_photo" src={user.profileImage} alt="Img" />
                         <div className="posts_count">
