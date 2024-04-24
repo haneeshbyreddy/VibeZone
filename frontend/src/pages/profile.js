@@ -1,70 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './profile.css';
-import { useLocation } from 'react-router-dom';
 
-function Profile({ userId, onUserChange }) {
-    const [user, setUser] = useState({ name: 'Demo', profileImage: 'None', posts: [] });
-    const [usersList, setUsersList] = useState([]);
-    const [refreshPostToggle, setRefreshPostToggle] = useState(false);
-
-    useEffect(() => {
-        fetch('https://api.vibezone.space/api/getAllUsers')
-            .then((response) => response.json())
-            .then((data) => {
-                setUsersList(data);
-            });
-    }, []);
-
-    useEffect(() => {
-        if (userId) {
-            fetch(`https://api.vibezone.space/api/${userId}`)
-                .then((data) => data.json())
-                .then((json) => setUser(json));
-        }
-    }, [userId, refreshPostToggle]);
-
-    const refreshPosts = () => {
-        setRefreshPostToggle(!refreshPostToggle);
-        alert('Posts refreshed');
-    };
+function Profile({ user }) {
 
     function isImage(url) {
         return /\.(jpg|jpeg|png|gif)$/i.test(url);
     }
 
-    const { pathname } = useLocation();
-
-    const handleUserChange = (event) => {
-        onUserChange(event.target.value)
-    };
-
     return (
         <div className="wrapper">
             <div className="content">
-                <div className="nav">
-                    <h1 className="main-heading">VibeZone</h1>
-                    <div className="navbar">
-                        <a href={`/${userId}`} className={pathname === '/' ? 'active' : ''}>
-                            <i className="fa fa-fw fa-home"></i>
-                        </a>
-                        <a>
-                            <i className="fa fa-fw fa-search"></i>
-                        </a>
-                        <a href={`/${userId}/profile`} className={pathname === '/profile' ? 'active' : ''}>
-                            <i className="fa fa-fw fa-user"></i>{' '}
-                        </a>
-                        <a onClick={refreshPosts}>
-                            <i className="fa fa-fw fa-sync-alt"></i>
-                        </a>
-                    </div>
-                </div>
-                <select value={userId} onChange={handleUserChange}>
-                    {usersList.map((u) => (
-                        <option key={u._id} value={u._id}>
-                            {u.name}
-                        </option>
-                    ))}
-                </select>
                 <div className="divider"></div>
                 <div className="profile_info">
                     <h1 style={{color:'white'}}>{user.name}</h1>

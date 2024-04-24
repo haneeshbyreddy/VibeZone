@@ -1,36 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './home.css';
 
-function Home({ userId, onUserChange }) {
-  const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
-  const [usersList, setUsersList] = useState([]);
-  const [refreshPostToggle, setRefreshPostToggle] = useState(false);
+function Home({ userId, user, refreshPosts, setUser }) {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const videoRefs = useRef([]);
   const cancelTokenSource = useRef(axios.CancelToken.source());
-
-  useEffect(() => {
-      fetch('https://api.vibezone.space/api/getAllUsers')
-          .then((response) => response.json())
-          .then((data) => {
-              setUsersList(data);
-          });
-  }, []);
-  // Refresh Posts
-  useEffect(() => {
-    fetch(`https://api.vibezone.space/api/${userId}`, { method: 'GET' })
-      .then(data => data.json())
-      .then(json => setUser(json));
-  }, [userId, refreshPostToggle]);
-
-  const refreshPosts = () => {
-    setRefreshPostToggle(!refreshPostToggle);
-    alert("Posts refreshed");
-  };
 
   // Add Post API
   const addPost = async (formData) => {
@@ -56,8 +33,8 @@ function Home({ userId, onUserChange }) {
     }
     setLoading(false)
     setUploadProgress(0)
+    refreshPosts()
     setShowPopup(!showPopup);
-    setRefreshPostToggle(!refreshPostToggle);
     cancelTokenSource.current.cancel('Operation canceled')
   };
 
@@ -75,6 +52,7 @@ function Home({ userId, onUserChange }) {
         ...user,
         posts: user.posts.filter((_, i) => i !== index)
       }));
+      console.log('deleted')
     } else {
       alert('Failed to delete Post');
     }
@@ -114,10 +92,8 @@ function Home({ userId, onUserChange }) {
         observer.observe(videoRef);
       }
     });
-
     // Cleanup function
     return () => {
-      // Disconnect the observer
       observer.disconnect();
     };
   }, [user.posts]);
@@ -127,9 +103,6 @@ function Home({ userId, onUserChange }) {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
-      // for (const entry of formData.entries()) {
-      //   console.log(entry);
-      // }
       cancelTokenSource.current = axios.CancelToken.source()
       addPost(formData);
     }
@@ -141,31 +114,9 @@ function Home({ userId, onUserChange }) {
     setShowPopup(!showPopup)
   }
 
-  const handleUserChange = (event) => {
-      onUserChange(event.target.value)
-  };
-
-  // APP return
   return (
     <div className='wrapper'>
       <div className='content'>
-        <div className='nav'>
-          <h1 className='main-heading'>VibeZone</h1>
-          <div className="navbar">
-            <a href={`/${userId}`} className="active"> <i className="fa fa-fw fa-home"></i></a>
-            <a > <i className="fa fa-fw fa-search"></i></a>
-            <a href={`/${userId}/profile`} > <i className="fa fa-fw fa-user"></i> </a>
-            <a onClick={refreshPosts}> <i className="fa fa-fw fa-sync-alt"></i></a>
-            <a onClick={() => { setShowPopup(!showPopup) }}> <i className="fa fa-fw fa-plus"></i></a>
-          </div>
-        </div>
-        <select value={userId} onChange={handleUserChange}>
-            {usersList.map((u) => (
-                <option key={u._id} value={u._id}>
-                    {u.name}
-                </option>
-            ))}
-        </select>
         {showPopup && (
           <div id="popupOverlay" className="overlay-container show">
             <div className="popup-box">
@@ -190,7 +141,8 @@ function Home({ userId, onUserChange }) {
           </div>
         )}
         <div className='divider'></div>
-        {user.posts.map((mediaUrl, index) => (
+        <a className='post_add' onClick={() => { setShowPopup(!showPopup) }}>New Post</a>
+        {user.posts.reverse().map((mediaUrl, index) => (
           <div style={{ width: '100%' }}>
             <div className='post' key={index}>
               <div className='post-info'>

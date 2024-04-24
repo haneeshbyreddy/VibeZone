@@ -1,0 +1,15 @@
+.active {
+    background-color: yellow;
+}
+
+select {
+    margin-top: 10px;
+    color: white;
+    background-color: #555;
+    text-decoration: none;
+    padding: 2px 8px;
+    font-size: 1rem;
+    white-space: nowrap;
+    border: none;
+    border-radius: 25px;
+}
