@@ -190,7 +190,7 @@ function Home({ userId, onUserChange }) {
           </div>
         )}
         <div className='divider'></div>
-        {user.posts.map((mediaUrl, index) => (
+        {user.posts.reverse().map((mediaUrl, index) => (
           <div style={{ width: '100%' }}>
             <div className='post' key={index}>
               <div className='post-info'>
