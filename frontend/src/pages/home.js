@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './home.css';
 
@@ -152,9 +152,9 @@ function Home({ userId, onUserChange }) {
         <div className='nav'>
           <h1 className='main-heading'>VibeZone</h1>
           <div className="navbar">
-            <a href={`/${userId}`} className="active"><i className="fa fa-fw fa-home"></i></a>
-            <a ><i className="fa fa-fw fa-search"></i></a>
-            <a href={`/${userId}/profile`} ><i className="fa fa-fw fa-user"></i> </a>
+            <Link to={`/${userId}`} className="active"><i className="fa fa-fw fa-home"></i></Link>
+            <Link to="#"><i className="fa fa-fw fa-search"></i></Link>
+            <Link to={`/${userId}/profile`}><i className="fa fa-fw fa-user"></i></Link>
             <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i></a>
             <a onClick={() => { setShowPopup(!showPopup) }}><i className="fa fa-fw fa-plus"></i></a>
           </div>

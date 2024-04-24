@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './profile.css';
 import { useLocation } from 'react-router-dom';
 
@@ -44,15 +45,15 @@ function Profile({ userId, onUserChange }) {
                 <div className="nav">
                     <h1 className="main-heading">VibeZone</h1>
                     <div className="navbar">
-                        <a href={`/${userId}`} className={pathname === '/' ? 'active' : ''}>
+                        <Link to={`/${userId}`} className={pathname === '/' ? 'active' : ''}>
                             <i className="fa fa-fw fa-home"></i>
-                        </a>
-                        <a>
+                        </Link>
+                        <Link to="#">
                             <i className="fa fa-fw fa-search"></i>
-                        </a>
-                        <a href={`/${userId}/profile`} className={pathname === '/profile' ? 'active' : ''}>
+                        </Link>
+                        <Link to={`/${userId}/profile`} className={pathname === '/profile' ? 'active' : ''}>
                             <i className="fa fa-fw fa-user"></i>{' '}
-                        </a>
+                        </Link>
                         <a onClick={refreshPosts}>
                             <i className="fa fa-fw fa-sync-alt"></i>
                         </a>
