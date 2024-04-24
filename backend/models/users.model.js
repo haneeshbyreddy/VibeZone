@@ -10,6 +10,10 @@ const UsersSchema = mongoose.Schema(
       type: String,
       require: [true, "Add a profile Pic"]
     },
+    description: {
+      type: String
+    },
+    connections: [String],
     posts: [String],
   },
   {
