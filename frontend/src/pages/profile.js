@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './profile.css';
 import { useLocation } from 'react-router-dom';
 
-function Profile() {
+function Profile({ userId, onUserChange }) {
     const [user, setUser] = useState({ name: 'Demo', profileImage: 'None', posts: [] });
     const [usersList, setUsersList] = useState([]);
-    const [selectedUserId, setSelectedUserId] = useState('');
     const [refreshPostToggle, setRefreshPostToggle] = useState(false);
 
     useEffect(() => {
@@ -13,17 +12,16 @@ function Profile() {
             .then((response) => response.json())
             .then((data) => {
                 setUsersList(data);
-                setSelectedUserId(data[0]?._id); // Set default selected user
             });
     }, []);
 
     useEffect(() => {
-        if (selectedUserId) {
-            fetch(`https://api.vibezone.space/api/${selectedUserId}`)
+        if (userId) {
+            fetch(`https://api.vibezone.space/api/${userId}`)
                 .then((data) => data.json())
                 .then((json) => setUser(json));
         }
-    }, [selectedUserId, refreshPostToggle]);
+    }, [userId, refreshPostToggle]);
 
     const refreshPosts = () => {
         setRefreshPostToggle(!refreshPostToggle);
@@ -37,7 +35,7 @@ function Profile() {
     const { pathname } = useLocation();
 
     const handleUserChange = (event) => {
-        setSelectedUserId(event.target.value);
+        onUserChange(event.target.value)
     };
 
     return (
@@ -60,14 +58,14 @@ function Profile() {
                         </a>
                     </div>
                 </div>
+                <select value={userId} onChange={handleUserChange}>
+                    {usersList.map((u) => (
+                        <option key={u._id} value={u._id}>
+                            {u.name}
+                        </option>
+                    ))}
+                </select>
                 <div className="divider"></div>
-                    <select value={selectedUserId} onChange={handleUserChange}>
-                        {usersList.map((u) => (
-                            <option key={u._id} value={u._id}>
-                                {u.name}
-                            </option>
-                        ))}
-                    </select>
                 <div className="profile_info">
                     <div className="profile_stats">
                         <img className="profile_photo" src={user.profileImage} alt="Img" />

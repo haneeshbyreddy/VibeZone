@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './home.css';
 
-function Home() {
+function Home({ userId, onUserChange }) {
   const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
+  const [usersList, setUsersList] = useState([]);
   const [refreshPostToggle, setRefreshPostToggle] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false)
@@ -11,12 +12,19 @@ function Home() {
   const videoRefs = useRef([]);
   const cancelTokenSource = useRef(axios.CancelToken.source());
 
+  useEffect(() => {
+      fetch('https://api.vibezone.space/api/getAllUsers')
+          .then((response) => response.json())
+          .then((data) => {
+              setUsersList(data);
+          });
+  }, []);
   // Refresh Posts
   useEffect(() => {
-    fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4', { method: 'GET' })
+    fetch(`https://api.vibezone.space/api/${userId}`, { method: 'GET' })
       .then(data => data.json())
       .then(json => setUser(json));
-  }, [refreshPostToggle]);
+  }, [userId, refreshPostToggle]);
 
   const refreshPosts = () => {
     setRefreshPostToggle(!refreshPostToggle);
@@ -27,7 +35,7 @@ function Home() {
   const addPost = async (formData) => {
     setLoading(true)
     try {
-      let response = await axios.post('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/uploadFile', formData, {
+      let response = await axios.post(`https://api.vibezone.space/api/${userId}/uploadFile`, formData, {
         onUploadProgress: ProgressEvent => {
           const percentCompleted = ((ProgressEvent.loaded * 100) / ProgressEvent.total).toFixed(2)
           setUploadProgress(percentCompleted)
@@ -54,7 +62,7 @@ function Home() {
 
   // Delete Post API
   const deletePost = async (imgUrl, index) => {
-    let response = await fetch('https://api.vibezone.space/api/661e94247ad53f4fefd1fdf4/deletePost', {
+    let response = await fetch(`https://api.vibezone.space/api/${userId}/deletePost`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -132,6 +140,9 @@ function Home() {
     setShowPopup(!showPopup)
   }
 
+  const handleUserChange = (event) => {
+      onUserChange(event.target.value)
+  };
 
   // APP return
   return (
@@ -147,12 +158,18 @@ function Home() {
             <a onClick={() => { setShowPopup(!showPopup) }}><i className="fa fa-fw fa-plus"></i></a>
           </div>
         </div>
+        <select value={userId} onChange={handleUserChange}>
+            {usersList.map((u) => (
+                <option key={u._id} value={u._id}>
+                    {u.name}
+                </option>
+            ))}
+        </select>
         {showPopup && (
           <div id="popupOverlay" className="overlay-container show">
             <div className="popup-box">
               <h2 style={{ color: 'green' }}>New Post</h2>
               <form className="form-container">
-                {/* <label className="form-label" htmlFor="file">File:</label> */}
                 <input
                   className="form-input"
                   type="file"

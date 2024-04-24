@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -8,14 +8,29 @@ import Home from "./pages/home";
 import Profile from "./pages/profile";
 
 function App() {
+    const [userId, setUserId] = useState('661e94247ad53f4fefd1fdf4');
+
+    const handleUserChange = (selectedUserId) => {
+        setUserId(selectedUserId);
+        console.log(selectedUserId)
+    };
+
     return (
         <Router>
             <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route exact path='/profile' element={<Profile />} />
+                {/* Pass userId and onUserChange as props to both components */}
+                <Route
+                    exact
+                    path='/'
+                    element={<Home userId={userId} onUserChange={handleUserChange} />}
+                />
+                <Route
+                    exact
+                    path='/profile'
+                    element={<Profile userId={userId} onUserChange={handleUserChange} />}
+                />
             </Routes>
         </Router>
     )
 }
-
 export default App;
