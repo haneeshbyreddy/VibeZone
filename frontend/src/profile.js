@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './profile.css';
 
-function Profile_data(){
+export function Profile_data(){
   const [user_data,set_user_data] = useState([{
     username:"Super_Hero",
     Bio:"Save The world",
