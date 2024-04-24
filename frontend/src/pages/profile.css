@@ -128,7 +128,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   flex-wrap: wrap;
 }
 .profile_media a {
-  width: 33%;
+  width: 32%;
   border: 1px solid gray;
   display: flex;
   justify-content: center;
