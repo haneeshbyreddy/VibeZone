@@ -12,7 +12,7 @@ import Signup from "./pages/signup";
 
 function App() {
     const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
-    const [userId, setUserId] = useState('661e94247ad53f4fefd1fdf4');
+    const [userId, setUserId] = useState('6629d8318e1dbd87847a11a4');
     const [usersList, setUsersList] = useState([]);
     const [refreshPostToggle, setRefreshPostToggle] = useState(false);
 
