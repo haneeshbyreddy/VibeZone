@@ -14,8 +14,7 @@ function Profile({ user, userId, usersList, refreshPosts, onUserChange }) {
                 <Navbar userId={userId} usersList={usersList} refreshPost={refreshPosts} onUserChange={onUserChange}/>
                 <div className="divider"></div>
                 <div className="profile_info">
-                    <h1 style={{color:'white'}}>{user.name}</h1>
-
+                    <h1 style={{textAlign: 'center', color: 'white'}}>{user.name}</h1>
                     <div className="profile_stats">
                         <img className="profile_photo" src={user.profileImage} alt="Img" />
                         <div className="posts_count">
