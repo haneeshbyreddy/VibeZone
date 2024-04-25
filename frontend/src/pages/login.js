@@ -3,21 +3,41 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 
-function Login({ setUserId }) {    
+function Login({ onUserChange }) {    
 
     const [name, setName] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
+
+    // const handleSubmit = (e) => {
+    //     e.preventDefault()
+    //     axios.post("https://api.vibezone.space/api/login", { name, password })
+    //     .then(result => {
+    //         console.log(result)
+    //         onUserChange(result.data.message)
+    //         navigate('/home')
+    //     })
+    //     .catch(err => console.log(err))
+    // }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.post("https://api.vibezone.space/api/login", { name, password })
         .then(result => {
             console.log(result)
-            setUserId(result.data.message)
-            navigate('/661e94247ad53f4fefd1fdf4')
+            onUserChange(result.data.message)
+            navigate('/home')
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            if (err.response && err.response.status === 404) {
+                alert("User not found.");
+            } else if (err.response && err.response.status === 401) {
+                alert("Invalid password.");
+            } else {
+                alert("An error occurred. Please try again later.");
+            }
+            console.log(err)
+        });
     }
 
 

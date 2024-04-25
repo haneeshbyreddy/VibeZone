@@ -12,22 +12,18 @@ import Signup from "./pages/signup";
 
 function App() {
     const [user, setUser] = useState({ "name": "Demo", "profileImage": "None", "posts": [] });
-    const [userId, setUserId] = useState('6629d8318e1dbd87847a11a4');
+    const [userId, setUserId] = useState('');
     const [usersList, setUsersList] = useState([]);
-    const [refreshPostToggle, setRefreshPostToggle] = useState(false);
 
-    useEffect(() => {
-        fetch(`https://api.vibezone.space/api/${userId}`, { method: 'GET' })
+    const handleUserIdChange = async (userId) => {
+        setUserId(userId)
+        await fetch(`https://api.vibezone.space/api/${userId}`, { method: 'GET' })
         .then(data => data.json())
         .then(json => setUser(json));
-    }, [userId, refreshPostToggle]);
+    }
 
     const refreshPosts = () => {
-        setRefreshPostToggle(!refreshPostToggle);
-    };
-
-    const handleUserChange = (selectedUserId) => {
-        setUserId(selectedUserId);
+        handleUserIdChange(userId)
     };
 
     useEffect(() => {
@@ -42,15 +38,15 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Navigate to={`/login`} />} />
-                <Route path="/login" element={<Login setUserId={setUserId}/>}/>
+                <Route path="/login" element={<Login onUserChange={handleUserIdChange}/>}/>
                 <Route path="/register" element={<Signup/>}/>
                 <Route
-                    path='/:userId'
-                    element={<Home userId={userId} user={user} usersList={usersList} refreshPosts={refreshPosts} setUser={setUser} onUserChange={handleUserChange}/>}
+                    path='/home'
+                    element={<Home userId={userId} user={user} usersList={usersList} refreshPosts={refreshPosts} setUser={setUser} onUserChange={handleUserIdChange}/>}
                 />
                 <Route
-                    path='/:userId/profile'
-                    element={<Profile userId={userId} user={user} usersList={usersList} refreshPosts={refreshPosts} setUser={setUser} onUserChange={handleUserChange}/>}
+                    path='/profile'
+                    element={<Profile userId={userId} user={user} usersList={usersList} refreshPosts={refreshPosts} setUser={setUser} onUserChange={handleUserIdChange}/>}
                 />
             </Routes>
         </Router>

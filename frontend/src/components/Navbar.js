@@ -9,13 +9,13 @@ function Navbar({ userId, usersList, refreshPosts, onUserChange }) {
     <div className='nav'>
       <h1 className='main-heading'>VibeZone</h1>
       <div className='navbar'>
-        <Link to={`/${userId}`} className={pathname === `/${userId}` ? 'active' : ''}>
+        <Link to={'/home'} className={pathname === '/home' ? 'active' : ''}>
           <i className='fa fa-fw fa-home'></i>
         </Link>
         <Link to='#'>
           <i className='fa fa-fw fa-search'></i>
         </Link>
-        <Link to={`/${userId}/profile`} className={pathname === `/${userId}/profile` ? 'active' : ''}>
+        <Link to={'/profile'} className={pathname === '/profile' ? 'active' : ''}>
           <i className='fa fa-fw fa-user'></i>{' '}
         </Link>
         <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i></a>

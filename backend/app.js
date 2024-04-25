@@ -52,20 +52,15 @@ app.use('/uploads', express.static('uploads'));
 
 app.post('/api/login', async (req, res) => {
     const { name, password } = req.body;
-
     if (!name || !password) {
       return res.status(400).json({ error: "Username and password are required." });
     }
-
     const user = await Users.findOne({ name });
-
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
-
     // const passwordMatch = await bcrypt.compare(password, user.password);
     passwordMatch = ( password == user.password )
-
     if (!passwordMatch) {
       return res.status(401).json({ error: "Invalid password." });
     }
