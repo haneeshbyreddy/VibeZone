@@ -19,6 +19,9 @@ function Navbar({ userId, usersList, refreshPosts, onUserChange }) {
           <i className='fa fa-fw fa-user'></i>{' '}
         </Link>
         <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i></a>
+        <Link to={'/login'}>
+          <i className='fa fa-sign-out-alt'></i>
+        </Link>
       </div>
         <select value={userId} onChange={(e) => (onUserChange(e.target.value))}>
             {usersList.map((u) => (
