@@ -50,10 +50,41 @@ app.get('/api/:id', async (req, res) => {
 
 app.use('/uploads', express.static('uploads'));
 
-app.post('/api/addUser', async (req, res) => {
-  let user = await Users.create(req.body);
-  res.status(200).json(user);
-});
+app.post('/api/login', async (req, res) => {
+    const { name, password } = req.body;
+
+    if (!name || !password) {
+      return res.status(400).json({ error: "Username and password are required." });
+    }
+
+    const user = await Users.findOne({ name });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // const passwordMatch = await bcrypt.compare(password, user.password);
+    passwordMatch = ( password == user.password )
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Invalid password." });
+    }
+    res.status(200).json({ message: user._id });
+})
+
+app.post('/api/register', async (req, res) => {
+  req.body.description = req.body.description || '';
+  req.body.profileImage = req.body.profileImage || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+
+  const newUser = await Users.create(req.body);
+  const folderName = newUser._id.toString();
+  const folderPath = path.join(__dirname, 'uploads', folderName);
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+  }
+  res.status(200).json(newUser)
+})
 
 app.post('/api/:id/uploadFile', (req, res) => {
   upload(req, res, (err) => {

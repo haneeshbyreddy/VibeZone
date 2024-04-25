@@ -169,7 +169,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 .btn-submit, 
 .btn-close-popup,
-.btn-cancel { 
+.btn-cancel,
+.form-btn { 
     padding: 12px 24px; 
     border: none; 
     border-radius: 8px; 
@@ -177,7 +178,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     transition: background-color 0.3s ease, color 0.3s ease; 
 } 
 
-.btn-submit { 
+.btn-submit, .form-btn { 
     background-color: gray; 
     color: #fff; 
 } 
@@ -190,7 +191,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 .btn-submit:hover, 
 .btn-close-popup:hover,
-.btn-cancel:hover { 
+.btn-cancel:hover,
+.form-btn:hover { 
     background-color: #4caf50; 
 } 
 

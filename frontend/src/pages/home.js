@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import './home.css';
+import Navbar from '../components/Navbar';
 
-function Home({ userId, user, refreshPosts, setUser }) {
+function Home({ userId, user, refreshPosts, setUser, onUserChange, usersList }) {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -118,6 +119,7 @@ function Home({ userId, user, refreshPosts, setUser }) {
   return (
     <div className='wrapper'>
       <div className='content'>
+        <Navbar userId={userId} usersList={usersList} refreshPost={refreshPosts} onUserChange={onUserChange}/>
         {showPopup && (
           <div id="popupOverlay" className="overlay-container show">
             <div className="popup-box">
@@ -143,7 +145,7 @@ function Home({ userId, user, refreshPosts, setUser }) {
         )}
         <div className='divider'></div>
         <a className='post_add' onClick={() => { setShowPopup(!showPopup) }}>New Post</a>
-        {user.posts.reverse().map((mediaUrl, index) => (
+        {user.posts.map((mediaUrl, index) => (
           <div style={{ width: '100%' }}>
             <div className='post' key={index}>
               <div className='post-info'>
@@ -151,7 +153,6 @@ function Home({ userId, user, refreshPosts, setUser }) {
                 <Link to={`/${userId}/profile`} style={{ color: 'white' , textDecorationLine:'none'}}>{user.name}
                     
                 </Link>
-                {/* <a className='profile-name' style={{ color: 'white' , textDecorationLine:'none'}} href={`/${userId}/profile`}>{user.name}</a> */}
                 <a className='download' href={mediaUrl} download><i className='fa fa-fw fa-download'></i></a>
                 <a className='delete' onClick={() => deletePost(mediaUrl, index)}><i className='fa fa-fw fa-trash'></i></a>
               </div>
@@ -159,7 +160,6 @@ function Home({ userId, user, refreshPosts, setUser }) {
                 {isImage(mediaUrl) ? (
                   <img src={mediaUrl} alt='Post' />
                 ) : (
-                  // <video controls muted>
                   <video ref={(el) => (videoRefs.current[index] = el)} controls muted>
                     <source src={mediaUrl} type='video/mp4' />
                     Your browser does not support the video tag.

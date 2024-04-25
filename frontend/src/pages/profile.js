@@ -1,7 +1,8 @@
 import React from 'react';
 import './profile.css';
+import Navbar from '../components/Navbar';
 
-function Profile({ user }) {
+function Profile({ user, userId, usersList, refreshPosts, onUserChange }) {
 
     function isImage(url) {
         return /\.(jpg|jpeg|png|gif)$/i.test(url);
@@ -10,6 +11,7 @@ function Profile({ user }) {
     return (
         <div className="wrapper">
             <div className="content">
+                <Navbar userId={userId} usersList={usersList} refreshPost={refreshPosts} onUserChange={onUserChange}/>
                 <div className="divider"></div>
                 <div className="profile_info">
                     <h1 style={{color:'white'}}>{user.name}</h1>
@@ -28,7 +30,7 @@ function Profile({ user }) {
                     <div className="profile_description">{user.description}</div>
                 </div>
                 <div className="profile_media">
-                    {user.posts.reverse().map((mediaUrl) =>
+                    {user.posts.map((mediaUrl) =>
                         isImage(mediaUrl) ? (
                             <a href={mediaUrl}>
                                 <img src={mediaUrl} alt="Post" className="profile_media_img" />

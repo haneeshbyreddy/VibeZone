@@ -5,10 +5,6 @@ import './Navbar.css'
 function Navbar({ userId, usersList, refreshPosts, onUserChange }) {
   const { pathname } = useLocation();
 
-  const handleUserChange = (event) => {
-      onUserChange(event.target.value)
-  };
-
   return (
     <div className='nav'>
       <h1 className='main-heading'>VibeZone</h1>
@@ -24,7 +20,7 @@ function Navbar({ userId, usersList, refreshPosts, onUserChange }) {
         </Link>
         <a onClick={refreshPosts}><i className="fa fa-fw fa-sync-alt"></i></a>
       </div>
-        <select value={userId} onChange={handleUserChange}>
+        <select value={userId} onChange={(e) => (onUserChange(e.target.value))}>
             {usersList.map((u) => (
                 <option key={u._id} value={u._id}>
                     {u.name}
