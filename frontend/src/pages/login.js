@@ -9,17 +9,6 @@ function Login({ onUserChange }) {
     const [password, setPassword] = useState()
     const navigate = useNavigate()
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-    //     axios.post("https://api.vibezone.space/api/login", { name, password })
-    //     .then(result => {
-    //         console.log(result)
-    //         onUserChange(result.data.message)
-    //         navigate('/home')
-    //     })
-    //     .catch(err => console.log(err))
-    // }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.post("https://api.vibezone.space/api/login", { name, password })
