@@ -11,7 +11,7 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post("https://api.vibezone.space/api/register", { name, password })
+        axios.post("http://127.0.0.1:3001/api/register", { name, password })
         .then(result => {console.log(result)
         navigate("/login")
         })

@@ -15,7 +15,7 @@ function Home({ userId, user, refreshPosts, setUser, onUserChange, usersList }) 
   const addPost = async (formData) => {
     setLoading(true)
     try {
-      let response = await axios.post(`https://api.vibezone.space/api/${userId}/uploadFile`, formData, {
+      let response = await axios.post(`http://127.0.0.1:3001/api/${userId}/uploadFile`, formData, {
         onUploadProgress: ProgressEvent => {
           const percentCompleted = ((ProgressEvent.loaded * 100) / ProgressEvent.total).toFixed(2)
           setUploadProgress(percentCompleted)
@@ -42,7 +42,7 @@ function Home({ userId, user, refreshPosts, setUser, onUserChange, usersList }) 
 
   // Delete Post API
   const deletePost = async (imgUrl, index) => {
-    let response = await fetch(`https://api.vibezone.space/api/${userId}/deletePost`, {
+    let response = await fetch(`http://127.0.0.1:3001/api/${userId}/deletePost`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

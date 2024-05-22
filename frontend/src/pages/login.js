@@ -11,7 +11,7 @@ function Login({ onUserChange }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post("https://api.vibezone.space/api/login", { name, password })
+        axios.post("http://127.0.0.1:3001/api/login", { name, password })
         .then(result => {
             console.log(result)
             onUserChange(result.data.message)
@@ -23,7 +23,7 @@ function Login({ onUserChange }) {
             } else if (err.response && err.response.status === 401) {
                 alert("Invalid password.");
             } else {
-                alert("An error occurred. Please try again later.");
+                // alert("An error occurred. Please try again later.");
             }
             console.log(err)
         });

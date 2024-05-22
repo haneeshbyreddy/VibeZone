@@ -43,7 +43,7 @@ app.get('/api/:id', async (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
-    user.posts = files.map(file => `https://api.vibezone.space/uploads/${req.params.id}/${file}`);
+    user.posts = files.map(file => `http://127.0.0.1:3001/uploads/${req.params.id}/${file}`);
     res.status(200).json(user);
   });
 });
@@ -124,7 +124,7 @@ async function startServer(uri) {
   .catch(() => {
     console.log('connection to database failed');
   });
-  app.listen(port, '202.133.54.90');
+  app.listen(port, '0.0.0.0');
 }
 
 startServer(uri);

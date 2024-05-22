@@ -17,7 +17,7 @@ function App() {
 
     const handleUserIdChange = async (userId) => {
         setUserId(userId)
-        await fetch(`https://api.vibezone.space/api/${userId}`, { method: 'GET' })
+        await fetch(`http://127.0.0.1:3001/api/${userId}`, { method: 'GET' })
         .then(data => data.json())
         .then(json => setUser(json));
     }
@@ -27,7 +27,7 @@ function App() {
     };
 
     useEffect(() => {
-        fetch('https://api.vibezone.space/api/getAllUsers')
+        fetch('http://127.0.0.1:3001/api/getAllUsers')
             .then((response) => response.json())
             .then((data) => {
                 setUsersList(data);
